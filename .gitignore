@@ -1,0 +1,8 @@
+/logs
+/skype-data
+/skype.json
+# IntelliJ project files
+.idea
+*.iml
+out
+gen

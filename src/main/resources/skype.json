@@ -1,0 +1,9 @@
+{
+  "username": "user",
+  "password": "pass",
+  "relogInterval": "1d",
+  "apiKeys": {
+    "bitly": "xxx",
+    "weather": "xxx"
+  }
+}
