@@ -11,6 +11,7 @@ import in.kyle.skype.skypebot2.commands.Message;
 import in.kyle.skype.skypebot2.storage.ChatData;
 import in.kyle.skype.skypebot2.storage.StringList;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -27,7 +28,9 @@ public class CAdmin {
             "prefix",
             "topic",
             "enabled",
-            "command"
+            "command",
+            "guest",
+            "stop"
     })
     // @formatter:on
     public void admin() {
@@ -162,13 +165,47 @@ public class CAdmin {
         return "Topic set to " + topic;
     }
     
-    enum TopicAction {
-        LOCK, UNLOCK, SET;
-        
-        @Override
-        public String toString() {
-            return name().toLowerCase();
+    @Command(description = "Guest commands", subCommands = {"kickAll", "allow"})
+    public void guest() {
+    }
+    
+    @Command(description = "Kick all guests")
+    public String kickAll(SkypeConversation conversation, SkypeLocalUser localUser) {
+        if (conversation.isAdmin(localUser)) {
+            List<SkypeUser> users = conversation.getUsers();
+            
+            conversation.sendMessage("Kicking guests...");
+            
+            SkypeUser user;
+            int guests = 0;
+            for (int i = 0; i < users.size(); i++) {
+                user = users.get(i);
+                if (user.getUsername().startsWith("guest:")) {
+                    conversation.kick(user);
+                    guests++;
+                    try {
+                        Thread.sleep(250);
+                    } catch (InterruptedException ignored) {
+                    }
+                }
+            }
+            return "Kicked " + guests + " guests";
+        } else {
+            return Message.NOT_ADMIN.toString();
         }
+    }
+    
+    @Command(description = "Set guest joining enabled")
+    public String allow(Enabled enabled, ChatData chatData) {
+        chatData.setGuestEnabled(enabled.toBoolean());
+        return "Guest joining set to " + chatData.isGuestEnabled();
+    }
+    
+    @Command(description = "Stop the bot", permission = "owner")
+    public String stop(SkypeBot bot) throws Exception {
+        bot.getChatDataManager().saveAll();
+        bot.getEzSkype().logout();
+        return "Shutting down";
     }
     
     enum Enabled {

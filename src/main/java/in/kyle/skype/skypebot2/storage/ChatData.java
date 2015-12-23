@@ -16,6 +16,7 @@ public class ChatData {
     private String prefix;
     private String topic;
     private boolean enabled;
+    private boolean guestEnabled = true;
     
     public ChatData(String chatId) {
         this.chatId = chatId;

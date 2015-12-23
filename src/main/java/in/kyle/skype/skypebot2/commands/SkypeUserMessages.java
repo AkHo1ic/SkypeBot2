@@ -41,7 +41,7 @@ public class SkypeUserMessages implements MessageSender<SkypeUser, SkypeConversa
     
     @Override
     public void sendCommandNotFound(SkypeUser user, SkypeConversation conversation, String s1) {
-        conversation.sendMessage("You do not have permission to execute this command");
+        conversation.sendMessage("Command not found");
     }
     
     @Override

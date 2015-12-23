@@ -24,6 +24,11 @@ public class AdminActionsListener {
             e.getConversation().sendMessage("You are banned");
             e.getConversation().kick(e.getUser());
         }
+        if (e.getUser().getUsername().startsWith("guest:")) {
+            if (!chatData.isGuestEnabled()) {
+                e.getConversation().kick(e.getUser());
+            }
+        }
     }
     
     public void onTopicChange(SkypeConversationUpdateTopicEvent e) {

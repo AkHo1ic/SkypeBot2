@@ -55,7 +55,13 @@ public class SkypeBot implements SkypeErrorHandler {
         commandSet.addParameterType(SkypeLocalUser.class, (k, v) -> ezSkype.getLocalUser());
         commandSet.addParameterType(SkypeConversation.class, (k, v) -> v);
         
-        CommandList.COMMANDS.forEach(commandSet::register);
+        CommandList.COMMANDS.forEach(o -> {
+            try {
+                commandSet.register(o);
+            } catch (NullPointerException e) {
+                EzSkype.LOGGER.error("Could not load command {} reason {}", o.getClass().getName(), e.getCause());
+            }
+        });
         
         try {
             ezSkype.login();

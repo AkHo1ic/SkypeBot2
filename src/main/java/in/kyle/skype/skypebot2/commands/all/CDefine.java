@@ -16,7 +16,7 @@ public class CDefine {
     
     @Command(description = "Define a term")
     public String define(@Bind(name = "term") String term) throws IOException {
-        JsonObject object = HttpRequest.builder().url("http://api.urbandictionary.com/v0/define").urlParameter("term", "ass").build()
+        JsonObject object = HttpRequest.builder().url("http://api.urbandictionary.com/v0/define").urlParameter("term", term).build()
                 .makeRequestJson();
         JsonArray list = object.getAsJsonArray("list");
         if (list.size() != 0) {
